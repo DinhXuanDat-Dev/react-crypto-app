@@ -1,38 +1,69 @@
-import React, { useEffect } from 'react'
-import { Col, Row, Typography, Statistic } from 'antd'
+import React from 'react'
+import CountUp from 'react-countup';
+import { Col, Row, Typography } from 'antd'
 import  { useGetCryptosQuery } from '../services/CryptoApi'
+import CryptoCurrencies from './CryptoCurrencies';
 
 const { Title } = Typography
 
 const HomePage = () => {
   const {data , isFetching} = useGetCryptosQuery(10);
-  const globalStat = data?.data?.stats;
-  console.log(data);
-  console.log(globalStat);
-
-
+  const globalStat = data?.data?.stats
+  
   if(isFetching) return 'Loading data...'
-
+  
   return (
     <>
       <Title className="heading">Global Crypto Stats</Title>
       <Row>
         <Col span={12}>
-          <Statistic title="Total CryptoCurrencies"></Statistic>
+          <Typography> Total CryptoCurrencies <br/>
+            <CountUp 
+              end={globalStat.total}
+              duration={2}
+              separator="."
+            />
+          </Typography>
         </Col>
         <Col span={12}>
-          <Statistic title="Total CryptoCurrencies"></Statistic>
+          <Typography> Total Exchanges <br/>
+            <CountUp
+              end={globalStat.totalExchanges}
+              duration={2}
+              separator="."
+            />
+          </Typography>
         </Col>
         <Col span={12}>
-          <Statistic title="Total CryptoCurrencies"></Statistic>
+          <Typography> Total Market Cap <br/>
+            <CountUp
+              end={globalStat.totalMarketCap}
+              duration={2}
+              separator="."
+            />
+          </Typography>
         </Col>
         <Col span={12}>
-          <Statistic title="Total CryptoCurrencies"></Statistic>
+          <Typography> Total 24h Volume <br/>
+            <CountUp
+              end={globalStat.total24hVolume}
+              duration={2}
+              separator="."
+            />
+          </Typography>
         </Col>
         <Col span={12}>
-          <Statistic title="Total CryptoCurrencies"></Statistic>
+          <Typography> Total Markets <br/>
+            <CountUp
+              end={globalStat.totalMarkets}
+              duration={2}
+              separator="."
+            />
+          </Typography>
         </Col>
       </Row>
+
+      <CryptoCurrencies/>
     </>
   )
 }
