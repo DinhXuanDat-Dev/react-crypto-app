@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Navbar, HomePage, CryptoCurrencies, News } from '../src/components'
 
 const App = () => {
+
   return (
     <div className="app">
       <div className="nav-bar">
