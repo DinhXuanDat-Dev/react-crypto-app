@@ -1,6 +1,6 @@
 import { Card, Col, Input, Row } from 'antd'
 import millify from 'millify'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useGetCryptosQuery } from '../services/CryptoApi'
 import "../../src/App.css"
@@ -13,12 +13,26 @@ const CryptoCurrencies = ({ simplified }) => {
   const [cryptos, setCryptos] = useState(cryptoList?.data?.coins)
   const [searchTerm, setSearchTerm] = useState('')
 
-  useEffect(() => {
+  let filterTimeout = useRef();
 
-    const filterData = cryptoList?.data?.coins.filter((coin) => coin.name.toLowerCase().includes(searchTerm))
-    setCryptos(filterData)
+  // useEffect(() => {
+  //   const filterData = cryptoList?.data?.coins.filter((coin) => coin.name.toLowerCase().includes(searchTerm))
 
-  }, [cryptoList, searchTerm])
+  //   setCryptos(filterData)
+
+  //   console.log('searchTerm', searchTerm);
+
+  // }, [cryptoList, searchTerm])
+
+  //debounce search
+  const handleFilterCurrency = query => {
+    clearTimeout(filterTimeout)
+    if (!query) return setCryptos(cryptoList?.data?.coins)
+    filterTimeout = setTimeout(() => {
+      console.log('====>', query)
+      setCryptos(cryptoList?.data?.coins.filter((coin) => coin.name.toLowerCase().includes(query)))
+    }, 500)
+  }
 
   if (isFetching) return 'Loading list data...'
 
@@ -28,7 +42,8 @@ const CryptoCurrencies = ({ simplified }) => {
         <div className="search-crypto">
           <Input
             placeholder="Search Crypto Currency"
-            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+            // onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+            onChange={(e) => handleFilterCurrency(e.target.value.toLowerCase())}
           ></Input>
         </div>
       )}
